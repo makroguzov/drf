@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from .models import Profile
+from .serializers import ReadOnlyUserSerializer
+
+
+class ReadOnlyProfileViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ReadOnlyUserSerializer
