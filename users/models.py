@@ -19,3 +19,22 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class TODO(models.Model):
+    class Status(models.TextChoices):
+        OPEN = 'OPEN', 'Открыта'
+        CLOSE = 'CLOSE', 'Закрыта'
+
+    text = models.TextField()
+    creator = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='todos')
+    status = models.CharField(max_length=63,
+                              choices=Status.choices,
+                              default=Status.OPEN)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'todo <status: {self.status}>:- {self.text[:50]} {"..." if len(self.text) > 50 else ""}'
